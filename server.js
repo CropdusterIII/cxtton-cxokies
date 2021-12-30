@@ -5211,7 +5211,7 @@ var maintainloop = (() => {
                             x: d.x + scaleOffset,
                             y: d.y + scaleOffset
                         });
-                        o.define(Class.mazeWall);
+                        o.define(Class.obstacle);
                         o.SIZE = (d.s * 0.5) + d.sS;
                         if (configm.RainbowColors) o.color = Math.floor((x + 1) / Math.floor(configm.size / 8));
                         o.team = -101;
