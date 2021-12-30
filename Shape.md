@@ -1,4 +1,4 @@
-Elite Falcon shape:
+Weird awp shape:
 [[-0.99,-0.5],
 [0.995,-0.5],
 [1.487,0],

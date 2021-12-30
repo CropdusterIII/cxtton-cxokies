@@ -2166,6 +2166,32 @@ class Entity {
             this.maxSpeed = this.topSpeed;
             this.damp = 0.05;
             break;
+        // credits to arrasicoi-glitch-source-dev-2 for this code
+        case 'miniGrow':
+            this.SIZE += 0.5;
+            this.maxSpeed = this.topSpeed;
+            break; 
+         
+        case 'grow':
+            this.SIZE += 1;
+            this.maxSpeed = this.topSpeed;
+            break;
+            
+        case 'megaGrow':
+            this.SIZE += 1.5;
+            this.maxSpeed = this.topSpeed;
+            break;
+          
+        case 'gigaGrow':
+            this.SIZE += 2;
+            this.maxSpeed = this.topSpeed;
+            break;
+            
+        case 'ultraGrow':
+            this.SIZE += 69;
+            this.maxSpeed = this.topSpeed;
+            break;
+        // end
         case 'motor':
             this.maxSpeed = 0;            
             if (this.topSpeed) {
