@@ -26,7 +26,6 @@ Array.prototype.remove = index => {
         return r;
     }
 };
-
 // Set up room.
 global.fps = "Unknown";
 var roomSpeed = c.gameSpeed;
@@ -71,9 +70,13 @@ const room = {
     room.findType('bas2');
     room.findType('bas3');
     room.findType('bas4');
+    room.findType('bap1');
+    room.findType('bap2');
+    room.findType('bap3');
+    room.findType('bap4');
     room.findType('roid');
     room.findType('rock');
-    room.nestFoodAmount = 1.5 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+   room.nestFoodAmount = 1.5 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
     room.random = () => {
         return {
             x: ran.irandom(room.width),
@@ -763,6 +766,27 @@ class io_fastspin extends IO {
         };        
     }
 }
+class io_helicopterhelicopter extends IO {
+    constructor(b) {
+        super(b);
+        this.a = 0;
+    }
+    
+    think(input) {
+        this.a += 0.00000001;
+        let offset = 0;
+        if (this.body.bond != null) {
+            offset = this.body.bound.angle;
+        }
+        return {                
+            target: {
+                x: Math.cos(this.a + offset),
+                y: Math.sin(this.a + offset),
+            },  
+            main: true,
+        };        
+    }
+}
 class io_reversespin extends IO {
     constructor(b) {
         super(b);
@@ -799,7 +823,8 @@ class io_dontTurn extends IO {
         };        
     }
 }
-class io_fleeAtLowHealth extends IO {
+    
+ class io_fleeAtLowHealth extends IO {
     constructor(b) {
         super(b);
         this.fear = util.clamp(ran.gauss(0.7, 0.15), 0.1, 0.9);
@@ -837,7 +862,9 @@ const levelers = [
     1,  2,  3,  4,  5,  6,  7,  8,  9,  10,
     11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-    31, 32, 33, 34, 35, 36, 38, 40, 42, 44,
+    31, 32, 33, 34, 35, 36, 37, 38, 40, 42,
+    43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
+    54, 56, 58, 60,
 ];
 class Skill {
     constructor(inital = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) { // Just skill stuff. 
@@ -1052,24 +1079,29 @@ const lazyRealSizes = (() => {
 
 // Define how guns work
 class Gun {
-    constructor(body, info) {
+    constructor(body, info) {   
         this.lastShot = {
             time: 0,
             power: 0,
         };
+        let color = this.color;
         this.body = body;
         this.master = body.source;
         this.label = '';
         this.controllers = [];
         this.children = [];
+        this.color = color;
+        this.skin = 0;
         this.control = {
             target: new Vector(0, 0),
             goal: new Vector(0, 0),
             main: false,
             alt: false,
             fire: false,
-        };        
+        }; 
+        this.color = 16
         this.canShoot = false;
+        if (info.PROPERTIES != null && info.PROPERTIES.SKIN != null) this.skin = info.PROPERTIES.SKIN;
         if (info.PROPERTIES != null && info.PROPERTIES.TYPE != null) {
             this.canShoot = true;
             this.label = (info.PROPERTIES.LABEL == null) ?
@@ -1123,7 +1155,10 @@ class Gun {
                 false : info.PROPERTIES.SYNCS_SKILLS;
             this.negRecoil = (info.PROPERTIES.NEGATIVE_RECOIL == null) ?
                 false : info.PROPERTIES.NEGATIVE_RECOIL;
-        }                    
+            this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ?
+                false : info.PROPERTIES.SHOOT_ON_DEATH;
+             }  
+        if (info.PROPERTIES != null && info.PROPERTIES.COLOR != null) this.color = info.PROPERTIES.COLOR;
         let position = info.POSITION;
         this.length = position[0] / 10;
         this.width = position[1] / 10;
@@ -1133,7 +1168,7 @@ class Gun {
         this.direction = _off.direction;
         this.offset = _off.length / 10;
         this.delay  = position[6];
-
+        
         this.position = 0;
         this.motion = 0;
         if (this.canShoot) {
@@ -1292,7 +1327,7 @@ class Gun {
         o.coreSize = o.SIZE;
     }
 
-    bulletInit(o) {
+    bulletInit(o, custom = []) {
         // Define it by its natural properties
         this.bulletTypes.forEach(type => o.define(type));
         // Pass the gun attributes
@@ -1311,9 +1346,10 @@ class Gun {
             o.parent = this.body;
             this.body.children.push(o);
             this.children.push(o);  
-        }        
-        o.source = this.body;
+        }
+        custom.includes('tissue') || (o.source = this.body);
         o.facing = o.velocity.direction;
+       
         // Necromancers.
         let oo = o;
         o.necro = host => {
@@ -1709,7 +1745,7 @@ class Entity {
         }
         if (set.COLOR != null) { 
             this.color = set.COLOR; 
-        }   
+        } 
         if (set.CONTROLLERS != null) { 
             let toAdd = [];
             set.CONTROLLERS.forEach((ioName) => {
@@ -1841,6 +1877,16 @@ class Entity {
                 this.upgrades.push({ class: e, tier: 3, level: c.TIER_3, index: e.index });
             });
         }
+        if (set.UPGRADES_TIER_4 != null) { 
+            set.UPGRADES_TIER_4.forEach((e) => {
+                this.upgrades.push({ class: e, tier: 4, level: c.TIER_4, index: e.index });
+            });
+        }
+        if (set.UPGRADES_TIER_5 != null) { 
+            set.UPGRADES_TIER_5.forEach((e) => {
+                this.upgrades.push({ class: e, tier: 5, level: c.TIER_5, index: e.index });
+            });
+        }
         if (set.SIZE != null) {
             this.SIZE = set.SIZE * this.squiggle;
             if (this.coreSize == null) { this.coreSize = this.SIZE; }
@@ -1883,6 +1929,7 @@ class Entity {
         if (set.MAX_CHILDREN != null) { 
             this.maxChildren = set.MAX_CHILDREN; 
         }
+        
         if (set.FOOD != null) {
             if (set.FOOD.LEVEL != null) { 
                 this.foodLevel = set.FOOD.LEVEL; 
@@ -2016,7 +2063,7 @@ class Entity {
     }
 
     get size() {
-        if (this.bond == null) return (this.coreSize || this.SIZE) * (1 + this.skill.level / 45);
+        if (this.bond == null) return (this.coreSize || this.SIZE) * (1 + this.skill.level / 60);
         return this.bond.size * this.bound.size;
     }
 
@@ -2199,6 +2246,9 @@ class Entity {
         switch(this.facingType) {
         case 'autospin':
             this.facing += 0.02 / roomSpeed;
+            break;
+        case 'autohelispin':
+            this.facing += this.velocity.length / 10 * Math.PI / roomSpeed;
             break;
         case 'turnWithSpeed':
             this.facing += this.velocity.length / 90 * Math.PI / roomSpeed;
@@ -2467,7 +2517,7 @@ class Entity {
         // Remove from the collision grid
         this.removeFromGrid();
         this.isGhost = true;
-    }    
+         }    
     
     isDead() {
         return this.health.amount <= 0; 
@@ -2564,14 +2614,16 @@ var http = require('http'),
                 statnames: e.settings.skillNames,
                 position: positionInfo,
                 upgrades: e.upgrades.map(r => ({ tier: r.tier, index: r.index })),
-                guns: e.guns.map(function(gun) {
+               guns: e.guns.map(function(gun) {
                     return {
+                        skin: rounder(gun.skin),
                         offset: rounder(gun.offset),
                         direction: rounder(gun.direction),
                         length: rounder(gun.length),
                         width: rounder(gun.width),
                         aspect: rounder(gun.aspect),
                         angle: rounder(gun.angle),
+                        color: rounder(gun.color),
                     };
                 }),
                 turrets: e.turrets.map(function(t) { 
@@ -3038,7 +3090,7 @@ const sockets = (() => {
                 case 'L': { // level up cheat
                     if (m.length !== 0) { socket.kick('Ill-sized level-up request.'); return 1; }
                     // cheatingbois
-                    if (player.body != null) { if (player.body.skill.level < c.SKILL_CHEAT_CAP || ((socket.key === process.env.SECRET) && player.body.skill.level < 45)) {
+                    if (player.body != null) { if (player.body.skill.level < c.SKILL_CHEAT_CAP || ((socket.key === process.env.SECRET) && player.body.skill.level < 60)) {
                         player.body.skill.score += player.body.skill.levelScore;
                         player.body.skill.maintain();
                         player.body.refreshBodyAttributes();
@@ -4529,11 +4581,11 @@ var maintainloop = (() => {
     placeRoids();
     // Spawning functions
     let spawnBosses = (() => {
-        let timer = 0;
+        let timer = 8;
         let boss = (() => {
             let i = 0,
                 names = [],
-                bois = [Class.egg],
+                bois = [Class.elite],
                 n = 0,
                 begin = 'yo some shit is about to move to a lower position',
                 arrival = 'Something happened lol u should probably let Neph know this broke',
@@ -4549,7 +4601,7 @@ var maintainloop = (() => {
                     o.name = names[i++];
             };
             return {
-                prepareToSpawn: (classArray, number, nameClass, typeOfLocation = 'norm') => {
+                prepareToSpawn: (classArray, number, nameClass, typeOfLocation = 'nest') => {
                     n = number;
                     bois = classArray;
                     loc = typeOfLocation;
@@ -4577,47 +4629,68 @@ var maintainloop = (() => {
             };
         })();
         return census => {
-            if (timer > 6000 && ran.dice(16000 - timer)) {
+            if (timer > 1600 && ran.dice(1500 - timer)) {
                 util.log('[SPAWN] Preparing to spawn...');
-                timer = 0;
+                timer = 8;
                 let choice = [];
-                switch (ran.chooseChance(40, 1)) {
+                switch  (ran.chooseChance(1, 1, 2)) {
                     case 0: 
-                        choice = [[Class.elite_destroyer], 2, 'a', 'nest'];
+                        choice = [[Class.elite_destroyer], 1, 'a', 'nest'];
                         break;
                     case 1: 
                         choice = [[Class.palisade], 1, 'castle', 'norm']; 
                         sockets.broadcast('A strange trembling...');
                         break;
+                    case 2: 
+                        choice = [[Class.elitefalc], 2, 'castle', 'norm']; 
+                        sockets.broadcast('Time To Rush Yourself Ready!');
+                        break;
                 }
                 boss.prepareToSpawn(...choice);
-                setTimeout(boss.spawn, 3000);
+                setTimeout(boss.spawn, 4);
                 // Set the timeout for the spawn functions
             } else if (!census.miniboss) timer++;
         };
     })();
-    let spawnCrasher = census => {
-        if (ran.chance(1 -  0.5 * census.crasher / room.maxFood / room.nestFoodAmount)) {
-            let spot, i = 30;
-            do { spot = room.randomType('nest'); i--; if (!i) return 0; } while (dirtyCheck(spot, 100));
-            let type = (ran.dice(80)) ? ran.choose([Class.sentryGun, Class.sentrySwarm, Class.sentryTrap]) : Class.crasher;
-            let o = new Entity(spot);
-                o.define(type);
-                o.team = -100;
+    let spawnCrasher = (() => {
+        const config = {
+            max: 10, // The max amount of crashers/sentries
+            chance: 0.625, // Math.random() must be greater than this in order to spawn anything
+            sentryChance: 0.8, // Math.random() must be greater than this for a sentry spawn.
+            crashers: [Class.crasher], // Crasher Types
+            sentries: [Class.sentryGun, Class.sentrySwarm, Class.sentryTrap] // Sentry types
+        };
+      return census => {
+            if (census.crasher < config.max) {
+                for (let i = 0; i < config.max - census.crasher; i ++) {
+                    if (Math.random() > config.chance) {
+                        let spot, i = 30;
+                        do {
+                            spot = room.randomType('nest');
+                            i --;
+                            if (!i) return 0;
+                        } while (dirtyCheck(spot, 100));
+                        const type = ran.choose(([config.crashers, config.sentries][+(Math.random() > config.sentryChance)]));
+                        let o = new Entity(spot);
+                        o.define(type);
+                        o.team = -100;
+                    }
+                }
+            }
         }
-    };
+    })();  
     // The NPC function
     let makenpcs = (() => {
         // Make base protectors if needed.
-            /*let f = (loc, team) => { 
+             let f = (loc, team) => { 
                 let o = new Entity(loc);
                     o.define(Class.baseProtector);
                     o.team = -team;
                     o.color = [10, 11, 12, 15][team-1];
             };
             for (let i=1; i<5; i++) {
-                room['bas' + i].forEach((loc) => { f(loc, i); }); 
-            }*/
+                room['bap' + i].forEach((loc) => { f(loc, i); }); 
+            }
         // Return the spawning function
         let bots = [];
         return () => {
@@ -4635,27 +4708,30 @@ var maintainloop = (() => {
             // Spawning
             spawnCrasher(census);
             spawnBosses(census);
-            /*/ Bots
-                if (bots.length < c.BOTS) {
+                    if (bots.length < c.BOTS) {
                     let o = new Entity(room.random());
-                    o.color = 17;
-                    o.define(Class.bot);
-                    o.define(Class.basic);
+                    o.define(Class.bot) 
+                    o.define(ran.choose([Class.basic, Class.basicp2]));
                     o.name += ran.chooseBotName();
-                    o.refreshBodyAttributes();
-                    o.color = 17;
+                    o.color = ran.choose([/*0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,*/ 12, /*13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55*/]) 
+                    o.refreshBodyAttributes(); 
+                    //  o.team = ran.chooseBot2Team();
+                    if (o.team === -1) {o.color = 10};
+                    if (o.team === -2) {o.color = 11};
+                    if (o.team === -3) {o.color = 12};
+                    if (o.team === -4) {o.color = 15};
                     bots.push(o);
                 }
-                // Remove dead ones
+                  // Remove dead ones
                 bots = bots.filter(e => { return !e.isDead(); });
-                // Slowly upgrade them
+// Slowly upgrade them
                 bots.forEach(o => {
-                    if (o.skill.level < 45) {
-                        o.skill.score += 35;
+                    if (o.skill.level < 0) {// if you only have 3 tiers make it 45
+                        o.skill.score += 0;
                         o.skill.maintain();
-                    }
+                } if (o.upgrades.length) o.upgrade(Math.floor(Math.random() * o.upgrades.length));
                 });
-            */
+            
         };
     })();
     // The big food function
@@ -4671,6 +4747,7 @@ var maintainloop = (() => {
                 case 3: a = Class.pentagon; break;
                 case 4: a = Class.bigPentagon; break;
                 case 5: a = Class.hugePentagon; break;
+                case 6: a = Class.heptagon; break;
                 default: throw('bad food level');
             }
             if (a !== {}) {
@@ -4792,7 +4869,8 @@ var maintainloop = (() => {
                 [3]: 0, // Penta
                 [4]: 0, // Beta
                 [5]: 0, // Alpha
-                [6]: 0,
+                [6]: 0, // Hepta
+                [7]: 0,
                 tank: 0,
                 sum: 0,
             };
@@ -4803,7 +4881,8 @@ var maintainloop = (() => {
                 [3]: 0, // Penta
                 [4]: 0, // Beta
                 [5]: 0, // Alpha
-                [6]: 0,
+                [6]: 0, // Hepta
+                [7]: 0,
                 sum: 0,
             };
             // Do the censusNest
@@ -4871,7 +4950,281 @@ var maintainloop = (() => {
     // Define food and food spawning
     return () => {
         // Do stuff
-        makenpcs();      
+        makenpcs(); 
+      //make maze walls
+        function generateMaze(configm = {}) {
+            //the variables used in all generation modes, such as the main array, x, y, and other things
+            let maze = JSON.parse(JSON.stringify(Array(configm.size)
+                    .fill(Array(configm.size)
+                        .fill(true)))),
+                x = 0,
+                y = 0,
+                center = Math.floor(configm.size * ((1 - configm.CenterSize) / 2)),
+                eroded = 1,
+                toErode = (configm.size * configm.size) / configm.Density,
+                directionsCovered = [0, 1, 2, 3],
+                direction = 0,
+                scaleOffset = (room.width - (room.width * configm.Scale)) / 2,
+                scale = (configm.Scale * room.width) / configm.size;
+
+            console.log("Total Objects Used: " + ((configm.size * configm.size) - toErode)
+                .toString());
+
+            function fillMaze(fill) {
+                for (let xpos = 0; xpos < configm.size; xpos++) {
+                    for (let ypos = 0; ypos < configm.size; ypos++) {
+                        maze[xpos][ypos] = fill;
+                    }
+                }
+            }
+
+            function fillEdges(fill) {
+                //fill the top, the bottom, then the left and right edge going down with a value
+                maze[0] = Array(configm.size)
+                    .fill(fill);
+                maze[configm.size - 1] = Array(configm.size)
+                    .fill(fill);
+                for (let line of maze) {
+                    line[0] = fill;
+                    line[configm.size - 1] = fill;
+                }
+            }
+
+            function randomPosition(typeSearch) {
+                //search the map until a block is found with the right properties then return
+                x = Math.floor(Math.random() * configm.size);
+                y = Math.floor(Math.random() * configm.size);
+                while (maze[x][y] != typeSearch) {
+                    x = Math.floor(Math.random() * configm.size);
+                    y = Math.floor(Math.random() * configm.size);
+                }
+            }
+
+            function clearCenter() {
+                //go through and remove all center blocks in proportion to center size
+                for (x = center; x < center + Math.floor(configm.size * configm.CenterSize); x++)
+                    for (y = center; y < center + Math.floor(configm.size * configm.CenterSize); y++) maze[x][y] = false;
+            }
+
+            if (configm.GenerateType == 4) { //Twisty mode
+                fillMaze(true);
+                clearCenter();
+                randomPosition(false);
+                toErode *= 2
+              console.log(" o: " + eroded + " : " + toErode)
+                while (eroded < toErode) {
+                    let pathLength = Math.floor(1 * Math.random()) * 6 + 3;
+                    if (directionsCovered.length < 1) randomPosition(false);
+                    directionsCovered = [0, 1, 2, 3];
+                    for (let j = 0; j < 4; j++) {
+                        direction = directionsCovered[Math.floor(directionsCovered.length * Math.random())];
+                        directionsCovered = directionsCovered.filter(function(x) {
+                            return x !== direction;
+                        });
+                        let pathClear = true;
+                        for (let k = 1; k <= pathLength; k++) {
+                            let multiplierx = (direction === 0) ? 1 : (direction === 2) ? -1 : 0;
+                            let multipliery = (direction === 1) ? 1 : (direction === 3) ? -1 : 0;
+                            let checkx = x + (multiplierx * k);
+                            let checky = y + (multipliery * k);
+                            if (x + (multiplierx * k) >= configm.size || x + (multiplierx * k) < 0 || y + (multipliery * k) >= configm.size || y + (multipliery * k) < 0 ||
+                                configm.size <= (checkx + multipliery) || (checkx - multipliery) < 0 || (checkx + multipliery) < 0 || configm.size <= (checkx - multipliery) ||
+                                configm.size <= (checky + multiplierx) || (checky - multiplierx) < 0 || (checky + multiplierx) < 0 || configm.size <= (checky - multiplierx)){
+                              break;
+                              pathClear = false
+                            }
+                            if (maze[checkx][checky] == false || maze[checkx + multipliery][checky + multiplierx] == false || maze[checkx - multipliery][checky - multiplierx] == false) pathClear = false;
+                        }
+                        if (!pathClear) continue;
+                        for (let k = 1; k <= pathLength; k++) {
+                            let multiplierx = (direction === 0) ? 1 : (direction === 2) ? -1 : 0;
+                            let multipliery = (direction === 1) ? 1 : (direction === 3) ? -1 : 0;
+                            if (x + (multiplierx * k) >= configm.size || x + (multiplierx * k) < 0 || y + (multipliery * k) >= configm.size || y + (multipliery * k) < 0) break;
+                            maze[x + (multiplierx * k)][y + (multipliery * k)] = false;
+                            eroded++;
+                        }
+                        console.log(" i: " + eroded + " : " + toErode)
+                        break;
+                    }
+                }
+                fillEdges(true);
+            }
+            if (configm.GenerateType == 3) { //Hollows mode
+                fillMaze(true);
+                clearCenter();
+                fillEdges(false);
+                for (let i = 0; i < toErode; i++) {
+                    //start in a preexisting path and make a random path branching from it
+                    for (let i = 0; i < 1000; i++) {
+                        direction = Math.floor(Math.random() * 4);
+                        randomPosition(false)
+                        if ((x === 0 || x === configm.size - 1) && (y === 0 || y === configm.size - 1)) continue;
+                        if (x === 0) direction = 0;
+                        else if (y === 0) direction = 1;
+                        else if (x === configm.size - 1) direction = 2;
+                        else if (y === configm.size - 1) direction = 3;
+                        let pathTotal = Math.floor(Math.random() * 8) + 1
+                        for (let pathdistance = 0; pathdistance < pathTotal; pathdistance++) {
+                            let tx = direction === 0 ? x + 1 : direction === 2 ? x - 1 : x;
+                            let ty = direction === 1 ? y + 1 : direction === 3 ? y - 1 : y;
+                            if (tx >= configm.size || ty >= configm.size || tx < 1 || ty < 1) break;
+                            if (!maze[tx][ty]) break;
+                            maze[tx][ty] = false;
+                            eroded++;
+                            x = tx;
+                            y = ty;
+                        }
+                        break;
+                    }
+                }
+            } //
+            if (configm.GenerateType == 2) { // custom maze mode
+                for (let xpos = 0; xpos < room.xgrid; xpos++) {
+                    for (let ypos = 0; ypos < room.ygrid; ypos++) {
+                        maze[xpos][ypos] = c.ROOM_SETUP[ypos][xpos] == "maze" ? 1 : 0
+                    }
+                }
+            } //
+            if (configm.GenerateType == 1) { // island mode
+                fillMaze(false)
+                //reset the maze and form the original clumps
+                for (let blocksMade = 0; blocksMade < Math.floor(configm.size); blocksMade++) {
+                    randomPosition(false);
+                    maze[x][y] = true;
+                }
+                toErode = (configm.size * configm.size) - toErode
+                for (let i = 0; i < toErode; i++) {
+                    //form random rock deposits around preexisting rocks, so long as they meet the checks
+                    for (let i = 0; i < 5000; i++) {
+                        randomPosition(true);
+                        let direction = Math.floor(Math.random() * 4);
+                        if (x === 0) direction = 0;
+                        else if (y === 0) direction = 1;
+                        else if (x === configm.size - 1) direction = 2;
+                        else if (y === configm.size - 1) direction = 3;
+                        let tx = direction === 0 ? x + 1 : direction === 2 ? x - 1 : x;
+                        let ty = direction === 1 ? y + 1 : direction === 3 ? y - 1 : y;
+                        if (maze[tx][ty] == true) continue;
+                        maze[tx][ty] = true;
+                        eroded++;
+                        break;
+                    }
+                }
+                clearCenter();
+                fillEdges(false);
+                //it feels better with clear edges and center so...
+            } //
+            if (configm.GenerateType == 0) { //normal maze mode
+                fillMaze(true);
+                clearCenter();
+                fillEdges(false);
+                for (let i = 0; i < configm.Entrances; i++) {
+                    for (let j = 0; j < 1000; j++) {
+                        //find a square then check if it's not a corner, if it lines up with center, and if it's an edge piece. If not retry
+                        randomPosition(false);
+                        if ((x === 0 || x === configm.size - 1) && (y === 0 || y === configm.size - 1)) continue;
+                        if ((x < center || x > center + Math.floor(configm.size * configm.CenterSize)) && (y < center || y > center + Math.floor(configm.size * configm.CenterSize))) continue;
+                        if (!directionsCovered.includes(direction)) continue;
+                        if (x === 0) direction = 0;
+                        else if (y === 0) direction = 1;
+                        else if (x === configm.size - 1) direction = 2;
+                        else if (y === configm.size - 1) direction = 3;
+                        else continue;
+                        directionsCovered.filter(function(x) {
+                            return x !== direction;
+                        });
+                        //now we have a good square drill to the center of the earth
+                        for (let k = 0; k < configm.size / 2; k++) {
+                            let tx = direction === 0 ? x + 1 : direction === 2 ? x - 1 : x;
+                            let ty = direction === 1 ? y + 1 : direction === 3 ? y - 1 : y;
+                            maze[tx][ty] = false;
+                            eroded++;
+                            x = tx
+                            y = ty
+                        }
+                        break;
+                    }
+                }
+                //repeat until we have the right number of blocks removed
+                for (let i = 0; i < toErode; i++) {
+                    //remove random blocks that fit our checks from the huge clump we currently have to make noise and randomness
+                    for (let i = 0; i < 1000; i++) {
+                        randomPosition(false);
+                        if ((x === 0 || x === configm.size - 1) && (y === 0 || y === configm.size - 1)) continue;
+                        let direction = Math.floor(Math.random() * 4);
+                        if (x === 0) direction = 0;
+                        else if (y === 0) direction = 1;
+                        else if (x === configm.size - 1) direction = 2;
+                        else if (y === configm.size - 1) direction = 3;
+                        let tx = direction === 0 ? x + 1 : direction === 2 ? x - 1 : x;
+                        let ty = direction === 1 ? y + 1 : direction === 3 ? y - 1 : y;
+                        if (maze[tx][ty] == false) continue;
+                        maze[tx][ty] = false;
+                        eroded++;
+                        break;
+                    }
+                }
+            } //
+
+            for (x = 0; x < configm.size; x++) {
+                for (y = 0; y < configm.size; y++) {
+                    let clumpSize = 0
+                    let breakBlock = false;
+                    for (let c = 0; c < 100; c++) {
+                        if (x + c >= configm.size || y + c >= configm.size) break;
+                        for (let yside = 0; yside < c; yside++) {
+                            if (!maze[x + yside][y + c]) breakBlock = true;
+                        }
+                        for (let xside = 0; xside < c; xside++) {
+                            if (!maze[x + c][y + xside]) breakBlock = true;
+                        }
+                        if (!maze[x + c][y + c]) breakBlock = true;
+                        if (breakBlock == true) break;
+                        clumpSize++
+                    };
+                    for (let xc = 0; xc < clumpSize; xc++) {
+                        for (let yc = 0; yc < clumpSize; yc++) {
+                            maze[x + xc][y + yc] = 0;
+                        }
+                    }
+                    maze[x][y] = clumpSize;
+                }
+            }
+            for (x = 0; x < configm.size; x++) {
+                for (y = 0; y < configm.size; y++) {
+                    //for every piece of array check if it's a wall, and if so spawn it according to size and place
+                    let spawnWall = false;
+                    let d = {};
+                    for (let c = 1; c < 100; c++) {
+                        if (maze[x][y] === c) {
+                            d = {
+                                x: (x * scale) + (scale * (c * 0.5)),
+                                y: (y * scale) + (scale * (c * 0.5)),
+                                s: scale * c,
+                                sS: (c * 0.007 * scale) - 0.5
+                            };
+                            spawnWall = true;
+                        }
+                    }
+                    if (spawnWall) {
+                        let o = new Entity({
+                            x: d.x + scaleOffset,
+                            y: d.y + scaleOffset
+                        });
+                        o.define(Class.mazeWall);
+                        o.SIZE = (d.s * 0.5) + d.sS;
+                        if (configm.RainbowColors) o.color = Math.floor((x + 1) / Math.floor(configm.size / 8));
+                        o.team = -101;
+                        o.protect();
+                        o.life();
+                    }
+                }
+            }
+            console.log("Type " + configm.GenerateType + " maze Generation Complete!");
+        };
+        if (c.MAZE.size != 0) {
+            generateMaze(c.MAZE);
+        }
         makefood(); 
         // Regen health and update the grid
         entities.forEach(instance => {
@@ -4943,6 +5296,34 @@ let server = http.createServer((req, res) => {
   }
 })
 
+//Arena Closed.
+let close = false
+function spawnClosers() {
+  let spot = room.randomType("roid");
+  let o = new Entity(spot);
+  const type = ran.choose([Class.ac]);
+  o.define(type);
+  o.team = -100;
+}; 
+function arenaClose() {
+  close = true;
+  let players = sockets.player
+  util.log("[INFO] Arena Closed.")
+  sockets.broadcast("Arena Closed: No players can join.")
+  spawnClosers();
+  spawnClosers();
+  spawnClosers(); 
+  spawnClosers();
+  spawnClosers();
+  spawnClosers();
+  spawnClosers();
+  spawnClosers(); 
+  if(players.length === 0) {
+  process.exit(0)
+  util.log("[INFO] Arena Successfully Closed.")
+  }
+}  
+
 let websockets = (() => {
     // Configure the websocketserver
     let config = { server: server }
@@ -4962,3 +5343,4 @@ let websockets = (() => {
 setInterval(gameloop, room.cycleSpeed);
 setInterval(maintainloop, 200);
 setInterval(speedcheckloop, 1000);
+  

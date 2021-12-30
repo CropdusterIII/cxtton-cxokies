@@ -1,0 +1,125 @@
+GUIDE:
+
+SETTING UP A TANK:
+
+The first thing you need to do when setting up a new tank is setting up the name in the game files; type: exports.(tank name) = {}
+
+This part determines what the tank is called in the game files.
+
+SETTING UP A PARENT:
+
+this part is optional but u can include it on an entity that is similar to something that already exists to save time.
+it takes settings from an entity that already exists and applies it to whatever you are making but you can apply different settings to it.
+
+to make a parent, inside the parentheses type PARENT: [exports.(tank name)],
+
+SETTING UP A LABEL:
+
+the label is the in-game name of the tank that you are creating, you can include any character that can be allowed on glitch, even emojis!
+
+to set up a label, type inside the parenthesess: LABEL: '(name here)',
+
+MAIN TANK SETTINGS:
+
+COLOR:
+
+this is optional if the tank has a parent group
+
+To make a color go inside the brackets and type: COLOR: (number here),
+
+The number you put will determine the color that the tank/entity has.
+
+Here is a list of all colors:
+
+0 = shield bar color
+1 = health bar color
+2 = triangle color
+3 = arena closer color
+4 = lavender color
+5 = crasher color
+6 = egg / eternal color
+7 = grey-brown color
+8 = pure white
+9 = shell color
+10 = blue team color / you in ffa
+11 = green team color
+12 = red team color / enemies in ffa
+13 = square color
+14 = pentagon color
+15 = purple team color
+16 = cannon / rock color
+17 = black
+18 = fallen boss / grey color
+19 = pure black
+20 = epileptic shape color
+21 = undercover cop light color 1 (blue to grey)
+22 = undercover cop light color 2 (grey to blue)
+23 = undercover cop light color 3 (red to grey)
+24 = undercover cop light color 4 (grey to red)
+25 to 29 = magenta
+30 = dark purple
+31 = royal blue
+32 = bright red
+33 = orange
+34 = lime
+35 = yellow
+36 = rainbow
+37 & 42 & 43 = custom color
+38 = other rainbow
+39 = purple flickering color
+40 = orange flickering color
+41 = teal flickering color
+
+NAME:
+
+the name is the name your character changes to when you upgrade to that tank/entity
+
+to add a custom character name when upgrading to a specific tank, in thr brackets, type: NAME: '(Name Here)',
+
+
+DAMAGE CLASS:
+
+his part is not optional if the tank has a parent group
+
+this determines what the games classifies the entity as: (Tank, Polygon, etc...)
+
+to add a damage class type: DAMAGE_CLASS: '(Type Here)',
+
+1 = polygon
+2 = tank
+3 = obstacle
+
+DANGER:
+
+this part is optional if the tank has a parent group
+
+this is used for priority targeting, the higher the danger value is, the higher chance an AI will target you
+
+to add a danger value, in the brackets, type: DANGER: (Number Here),
+
+VALUE:
+
+this setting is optional if the tank has a parent group
+
+this setting determines how many points the tank/entity has.
+
+to add a value, in the brackets, type: VALUE: (number here),
+
+SHAPE:
+
+
+this setting is optional if the tank has a parent group
+
+this setting determines how many sides the entity has, however, for whatever reason going above 15 sides causes the entity to be teleported to the top left corner of the map.
+
+to add sides, in the brackets, type: SHAPE: (Number of sides here),
+
+SECONDARY SETTINGS:
+
+INDEPENDENT:
+
+this setting if put on drones and minions allows them to no longer be controlled by the spawner.
+
+to enable this setting, in the brackets type: INDEPENDENT: true,
+
+to disable this setting, in the brackets type: INDEPENDENT: false,
