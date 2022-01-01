@@ -4669,7 +4669,7 @@ var maintainloop = (() => {
                         sockets.broadcast('A strange trembling...');
                         break;
                     case 2: 
-                        choice = [[Class.elitefalc], 2, 'castle', 'norm']; 
+                        choice = [[Class.elitefalc2], 2, 'castle', 'norm']; 
                         sockets.broadcast('Time To Rush Yourself Ready!');
                         break;
                 }
