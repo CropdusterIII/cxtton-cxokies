@@ -824,7 +824,63 @@ class io_dontTurn extends IO {
         };        
     }
 }
-    
+  
+class io_noram extends IO {
+    constructor(body) {
+        super(body);
+        this.turnwise = 1;
+    }
+
+    think(input) {
+        if (this.body.aiSettings.reverseDirection && ran.chance(0.005)) { this.turnwise = -1 * this.turnwise; }
+        if (input.target != null && (input.alt || input.main)) {
+            let sizeFactor = Math.sqrt(this.body.master.size / this.body.master.SIZE);
+            let leash = 60 * sizeFactor;
+            let orbit = 360 * sizeFactor;
+            let repel = 135 * sizeFactor;
+            let goal;
+            let power = 1;
+            let target = new Vector(input.target.x, input.target.y);
+            if (input.alt) {
+                // Leash
+                if (target.length < leash) {
+                    goal = {
+                        x: this.body.x + target.x,
+                        y: this.body.y + target.y,
+                    };
+                // Spiral repel
+                } else if (target.length < repel) {
+                    let dir = -this.turnwise * target.direction + Math.PI / 5;
+                    goal = {
+                        x: this.body.x + Math.cos(dir),
+                        y: this.body.y + Math.sin(dir),
+                    };
+                // Free repel
+                  } else {
+                    goal = {
+                        x: this.body.x - target.x,
+                        y: this.body.y - target.y,
+                    };
+                }
+            } else if (input.main) {
+                // Orbit point
+                let dir = this.turnwise * target.direction + 0.01;
+                goal = {
+                    x: this.body.x + target.x - orbit * Math.cos(dir),
+                    y: this.body.y + target.y - orbit * Math.sin(dir), 
+                };
+                if (Math.abs(target.length - orbit) < this.body.size * 2) {
+                    power = 0.7;
+                }
+            }
+            return { 
+                goal: goal,
+                power: power,
+            };
+        }
+    }
+}
+
  class io_fleeAtLowHealth extends IO {
     constructor(b) {
         super(b);
