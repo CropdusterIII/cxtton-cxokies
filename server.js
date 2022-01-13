@@ -1305,7 +1305,6 @@ class Gun {
     this.controllers = [];
     this.children = [];
     this.color = color;
-    this.skin = 0;
     this.control = {
       target: new Vector(0, 0),
       goal: new Vector(0, 0),
@@ -1315,9 +1314,7 @@ class Gun {
     };
     this.color = 16;
     this.canShoot = false;
-    if (info.PROPERTIES != null && info.PROPERTIES.SKIN != null)
-      this.skin = info.PROPERTIES.SKIN;
-    if (info.PROPERTIES != null && info.PROPERTIES.TYPE != null) {
+     if (info.PROPERTIES != null && info.PROPERTIES.TYPE != null) {
       this.canShoot = true;
       this.label = info.PROPERTIES.LABEL == null ? "" : info.PROPERTIES.LABEL;
       if (Array.isArray(info.PROPERTIES.TYPE)) {
@@ -1393,9 +1390,9 @@ class Gun {
         info.PROPERTIES.SHOOT_ON_DEATH == null
           ? false
           : info.PROPERTIES.SHOOT_ON_DEATH;
-    }
-    if (info.PROPERTIES != null && info.PROPERTIES.COLOR != null)
+       if (info.PROPERTIES != null && info.PROPERTIES.COLOR != null)
       this.color = info.PROPERTIES.COLOR;
+    }
     let position = info.POSITION;
     this.length = position[0] / 10;
     this.width = position[1] / 10;
@@ -3242,7 +3239,6 @@ var http = require("http"),
         upgrades: e.upgrades.map((r) => ({ tier: r.tier, index: r.index })),
         guns: e.guns.map(function (gun) {
           return {
-            skin: rounder(gun.skin),
             offset: rounder(gun.offset),
             direction: rounder(gun.direction),
             length: rounder(gun.length),
