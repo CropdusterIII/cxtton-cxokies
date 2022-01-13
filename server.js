@@ -1294,17 +1294,16 @@ const lazyRealSizes = (() => {
 // Define how guns work
 class Gun {
   constructor(body, info) {
+    this.color = 16;
     this.lastShot = {
       time: 0,
       power: 0,
     };
-    let color = this.color;
     this.body = body;
     this.master = body.source;
     this.label = "";
     this.controllers = [];
     this.children = [];
-    this.color = color;
     this.control = {
       target: new Vector(0, 0),
       goal: new Vector(0, 0),
@@ -1312,7 +1311,6 @@ class Gun {
       alt: false,
       fire: false,
     };
-    this.color = 16;
     this.canShoot = false;
      if (info.PROPERTIES != null && info.PROPERTIES.TYPE != null) {
       this.canShoot = true;
