@@ -2960,7 +2960,11 @@ class Entity {
     if (this.settings.diesAtLowSpeed) {
       if (
         !this.collisionArray.length &&
-        
+        this.velocity.length < this.topSpeed / 2
+      ) {
+        this.health.amount -= this.health.getDamage(1 / roomSpeed);
+      }
+    }
     // Shield regen and damage
     if (this.shield.max) {
       if (this.damageRecieved !== 0) {
@@ -5511,7 +5515,7 @@ var gameloop = (() => {
               n.poisonTime = 20;
               n.poisonedBy = my.master;
             }
-          }
+          
         /*************   BURN  ***********/
                       if (n.burn) {
                         my.burned = true
@@ -5588,7 +5592,7 @@ var gameloop = (() => {
           }
         }
       }
-    } 
+   } 
      // The actual collision resolution function
     return collision => {
       // Pull the two objects from the collision grid
