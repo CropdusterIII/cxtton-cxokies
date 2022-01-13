@@ -1294,7 +1294,6 @@ const lazyRealSizes = (() => {
 // Define how guns work
 class Gun {
   constructor(body, info) {
-    this.color = 16;
     this.lastShot = {
       time: 0,
       power: 0,
@@ -1311,6 +1310,7 @@ class Gun {
       alt: false,
       fire: false,
     };
+    this.color = 16;
     this.canShoot = false;
      if (info.PROPERTIES != null && info.PROPERTIES.TYPE != null) {
       this.canShoot = true;
@@ -1384,9 +1384,9 @@ class Gun {
         info.PROPERTIES.NEGATIVE_RECOIL == null
           ? false
           : info.PROPERTIES.NEGATIVE_RECOIL;
-       if (info.PROPERTIES != null && info.PROPERTIES.COLOR != null)
-      this.color = info.PROPERTIES.COLOR;
-      this.shootOnDeath =
+       if (info.PROPERTIES.COLOR != null && info.PROPERTIES != null)
+            this.color = info.PROPERTIES.COLOR
+       this.shootOnDeath =
         info.PROPERTIES.SHOOT_ON_DEATH == null
           ? false
           : info.PROPERTIES.SHOOT_ON_DEATH;
