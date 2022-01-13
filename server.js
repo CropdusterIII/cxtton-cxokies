@@ -5485,6 +5485,7 @@ var gameloop = (() => {
                         n.burnedBy = my.master
                       }
           /************* DO MOTION ***********/
+        
           if (nIsFirmCollide < 0) {
             nIsFirmCollide *= -0.5;
             my.accel.x -= nIsFirmCollide * component * dir.x;
@@ -5540,10 +5541,15 @@ var gameloop = (() => {
               };
             // Apply impulse as force
             my.accel.x += modifiers._me * force.x;
-            
-        
-    // The actual collision resolution function
-    return (collision) => {
+            my.accel.y += modifiers._me * force.y;
+            n.accel.x -= modifiers._n * force.x;
+            n.accel.y -= modifiers._n * force.y;
+          }
+        }
+      }
+    } 
+     // The actual collision resolution function
+    return collision => {
       // Pull the two objects from the collision grid
       let instance = collision[0],
         other = collision[1];
