@@ -5444,6 +5444,46 @@ var gameloop = (() => {
               n.damageRecieved += damage._me * deathFactor._me;
             }
           }
+          /*************   ICE  ***********/  
+                      if (n.ice) {
+                        my.iceed = true;
+                        my.iceedLevel = n.iceToApply;
+                        my.iceTime = 17;
+                        my.iceedBy = n.master;
+                      }
+                      if (my.ice) {
+                        n.iceed = true;
+                        n.iceedLevel = my.iceToApply;
+                        n.iceTime = 17;
+                        n.iceedBy = my.master;
+                      }    
+          /*************   POISON  ***********/
+            if (n.poison) {
+              my.poisoned = true;
+              my.poisonedLevel = n.poisionToApply;
+              my.poisonTime = 20;
+              my.poisonedBy = n.master;
+            }
+            if (my.poison) {
+              n.poisoned = true;
+              n.poisonedLevel = my.poisionToApply;
+              n.poisonTime = 20;
+              n.poisonedBy = my.master;
+            }
+          }
+        /*************   BURN  ***********/
+                      if (n.burn) {
+                        my.burned = true
+                        my.burnedLevel = n.burnToApply
+                        my.burnTime = 25
+                        my.burnedBy = n.master
+                      }
+                      if (my.burn) {
+                        n.burned = true
+                        n.burnedLevel = my.burnToApply
+                        n.burnTime = 25
+                        n.burnedBy = my.master
+                      }
           /************* DO MOTION ***********/
           if (nIsFirmCollide < 0) {
             nIsFirmCollide *= -0.5;
