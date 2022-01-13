@@ -1922,7 +1922,6 @@ class Entity {
     this.iceToApply = 0;
     this.showice = false;
     this.iceTimer = 0;
-    this.explosive = false;
     this.bruned = false;
     this.burn = false;
     this.burnedBy = -1;
@@ -2105,9 +2104,6 @@ class Entity {
     }
     if (set.LABEL != null) {
       this.label = set.LABEL;
-    }
-    if (set.EXPLOSIVE != null) {
-      this.explosive = set.EXPLOSIVE;
     }
     if (set.TYPE != null) {
       this.type = set.TYPE;
@@ -2909,60 +2905,15 @@ class Entity {
     }
     // Life-limiting effects
     if (this.settings.diesAtRange) {
-      this.range -= 1 / roomSpeed;
-      if (this.range < 0) {
-        if (this.explosive) {
-          let damRadius = this.size * 5;
-          var explo_me = this;
-          entities.forEach(function(newelement) {
-            let distancex = Math.abs(newelement.x - explo_me.x);
-            let distancey = Math.abs(newelement.y - explo_me.y);
-            let abs_distance = Math.sqrt(
-              distancex * distancex + distancey * distancey
-            );
-            if (
-              abs_distance <= damRadius &&
-              abs_distance > 0 &&
-              newelement.team != explo_me.team &&
-              !newelement.invuln
-            ) {
-              newelement.health.amount -= explo_me.damage;
-              if (newelement.health.amount <= 0) {
-                explo_me.master.skill.score += Math.ceil(
-                  util.getJackpot(newelement.skill.score)
-                );
-                if (newelement.settings.givesKillMessage) {
-                  explo_me.master.sendMessage(
-                    "You killed " + newelement.name + " with an explosion."
-                  );
-                  newelement.sendMessage(
-                    "You have been killed by " +
-                      explo_me.master.name +
-                      " with an explosive."
-                  );
-                }
-              }
+            this.range -= 1 / roomSpeed;
+            if (this.range < 0) {
+                this.kill();
             }
-          });
-          let visual = new Entity({ x: this.x, y: this.y });
-          visual.define(Class.bullet);
-          visual.range = 5;
-          visual.SIZE = this.size * 5;
-          visual.color = this.color;
-          visual.team = this.team;
-          visual.intangibility = false;
-          visual.invuln = false;
         }
-        this.kill();
-      }
-    }
-    if (this.settings.diesAtLowSpeed) {
-      if (
-        !this.collisionArray.length &&
-        this.velocity.length < this.topSpeed / 2
-      ) {
-        this.health.amount -= this.health.getDamage(1 / roomSpeed);
-      }
+        if (this.settings.diesAtLowSpeed) {
+            if (!this.collisionArray.length && this.velocity.length < this.topSpeed / 2) {
+                this.health.amount -= this.health.getDamage(1 / roomSpeed);
+            }
     }
     // Shield regen and damage
     if (this.shield.max) {
