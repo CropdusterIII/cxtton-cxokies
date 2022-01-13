@@ -5512,7 +5512,7 @@ var gameloop = (() => {
               elasticity *= 2;
             }
             let spring =
-                (2 * Math.sqrt(savedHealthRatio._me * savedHealthRatio._n)) /
+              (2 * Math.sqrt(savedHealthRatio._me * savedHealthRatio._n)) /
                 roomSpeed,
               elasticImpulse =
                 (Math.pow(combinedDepth.down, 2) *
@@ -5528,7 +5528,7 @@ var gameloop = (() => {
                 (1 - n.intangibility),
               force = {
                 x: impulse * dir.x,
-                y: impulse * dir.y,
+                y: impulse * dir.y
               },
               modifiers = {
                 _me:
@@ -5536,17 +5536,12 @@ var gameloop = (() => {
                   deathFactor._n,
                 _n:
                   ((c.KNOCKBACK_CONSTANT * n.pushability) / n.mass) *
-                  deathFactor._me,
+                  deathFactor._me
               };
             // Apply impulse as force
             my.accel.x += modifiers._me * force.x;
-            my.accel.y += modifiers._me * force.y;
-            n.accel.x -= modifiers._n * force.x;
-            n.accel.y -= modifiers._n * force.y;
-          }
-        }
-      }
-    }
+            
+        
     // The actual collision resolution function
     return (collision) => {
       // Pull the two objects from the collision grid
@@ -6533,3 +6528,6 @@ let websockets = (() => {
 setInterval(gameloop, room.cycleSpeed);
 setInterval(maintainloop, 200);
 setInterval(speedcheckloop, 1000);
+setInterval(poisonLoop, room.cycleSpeed * 7);
+setInterval(burnLoop, room.cycleSpeed * 7);
+setInterval(iceLoop, room.cycleSpeed * 5);
