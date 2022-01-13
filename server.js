@@ -5698,6 +5698,172 @@ var gameloop = (() => {
   //setTimeout(moveloop, 1000 / roomSpeed / 30 - delta);
 })();
 // A less important loop. Runs at an actual 5Hz regardless of game speed.
+function returnRandomRingPoint(radius) {
+      let a = Math.random() * 2 * Math.PI
+          return {x: radius * Math.cos(a), y: radius * Math.sin(a)}
+}
+var iceLoop = (() => {
+    // Fun stuff, like RAINBOWS :D
+    function ice(my) {
+      entities.forEach(function(element) {
+        if (element.showice) {/*
+            let x = element.size + 10
+            let y = element.size + 10
+            Math.random() < 0.5 ? x *= -1 : x
+            Math.random() < 0.5 ? y *= -1 : y
+            Math.random() < 0.5 ? x *= Math.random() + 1 : x
+            Math.random() < 0.5 ? y *= Math.random() + 1 : y*/
+            let loc = returnRandomRingPoint(element.size * 2.2)
+            //console.log(loc)
+            var o = new Entity({
+            x: element.x + loc.x,
+            y: element.y + loc.y
+            })
+            o.define(Class['iceEffect'])
+        }
+        if (element.iceed && element.type == 'tank') {
+            let x = element.size + 10
+            let y = element.size + 10
+            Math.random() < 0.5 ? x *= -1 : x
+            Math.random() < 0.5 ? y *= -1 : y
+            Math.random() < 0.5 ? x *= Math.random() + 1 : x
+            Math.random() < 0.5 ? y *= Math.random() + 1 : y
+            let loc = returnRandomRingPoint(element.size * 2.2)
+            //console.log(loc)
+            var o = new Entity({
+            x: element.x + loc.x,
+            y: element.y + loc.y
+            })
+            o.define(Class['iceEffect'])
+          
+            if (!element.invuln) {
+              element.velocity.x -= element.velocity.x / (0.8 - element.iceLevel);
+              element.velocity.y -= element.velocity.y / (0.8 - element.iceLevel);
+                 }
+          element.iceTime -= 1
+            if (element.iceTime <= 0) element.iceed = false
+           
+            if (element.health.amount <= 0 && element.iceedBy != undefined && element.iceedBy.skill != undefined) {
+              element.iceedBy.skill.score += Math.ceil(util.getJackpot(element.iceedBy.skill.score));
+              element.iceedBy.sendMessage('You killed ' + element.name + ' with Ice.');
+              element.sendMessage('You have been killed by ' + element.iceededBy.name + ' with Ice.')
+            }
+          }
+      }
+    )}
+  return () => {
+        //run the ice
+        ice()
+    };
+})(); 
+var poisonLoop = (() => {
+  // Fun stuff, like RAINBOWS :D
+  function poison(my) {
+    entities.forEach(function(element) {
+      if (element.showpoison) {
+        let x = element.size + 10;
+        let y = element.size + 10;
+        Math.random() < 0.5 ? (x *= -1) : x;
+        Math.random() < 0.5 ? (y *= -1) : y;
+        Math.random() < 0.5 ? (x *= Math.random() + 1) : x;
+        Math.random() < 0.5 ? (y *= Math.random() + 1) : y;
+        var o = new Entity({
+          x: element.x + x,
+          y: element.y + y
+        });
+        o.define(Class["poisonEffect"]);
+      }
+      if (element.poisoned && element.type == "tank") {
+        let x = element.size + 10;
+        let y = element.size + 10;
+        Math.random() < 0.5 ? (x *= -1) : x;
+        Math.random() < 0.5 ? (y *= -1) : y;
+        Math.random() < 0.5 ? (x *= Math.random() + 1) : x;
+        Math.random() < 0.5 ? (y *= Math.random() + 1) : y;
+        var o = new Entity({
+          x: element.x + x,
+          y: element.y + y
+        });
+        o.define(Class["poisonEffect"]);
+
+        if (!element.invuln) {
+          element.health.amount -=
+            element.health.max / (55 - element.poisonLevel);
+          element.shield.amount -=
+            element.shield.max / (35 - element.poisonLevel);
+        }
+
+        element.poisonTime -= 1;
+        if (element.poisonTime <= 0) element.poisoned = false;
+
+        if (
+          element.health.amount <= 0 &&
+          element.poisonedBy != undefined &&
+          element.poisonedBy.skill != undefined
+        ) {
+          element.poisonedBy.skill.score += Math.ceil(
+            util.getJackpot(element.poisonedBy.skill.score)
+          );
+          element.poisonedBy.sendMessage(
+            "You killed " + element.name + " with poison."
+          );
+          element.sendMessage(
+            "You have been killed by " +
+              element.poisonedBy.name +
+              " with poison."
+          );
+        }
+      }
+    });
+  }
+  return () => {
+    // run the poison
+    poison();
+  };
+  })();
+var burnLoop = (() => {
+    // Fun stuff, like RAINBOWS :D
+    function burn(my) {
+      entities.forEach(function(element) {
+        if (element.showburn) {
+            let loc = returnRandomRingPoint(element.size * 2.2)
+            //console.log(loc)
+            var o = new Entity({
+            x: element.x + loc.x,
+            y: element.y + loc.y
+            })
+            o.define(Class['burnEffect'])
+        }
+        if (element.burned && element.type == 'tank') {
+            let loc = returnRandomRingPoint(element.size * 2.2)
+            //console.log(loc)
+            var o = new Entity({
+            x: element.x + loc.x,
+            y: element.y + loc.y
+            })
+            o.define(Class['burnEffect'])
+          
+              if (!element.invuln) {
+              element.health.amount -= element.health.max / (100 - element.burnLevel)
+              element.shield.amount -= element.shield.max / (85 - element.burnLevel)
+            }
+          
+            element.burnTime -= 1
+            if (element.burnTime <= 0) element.burned = false
+           
+            if (element.health.amount <= 0 && element.burnedBy != undefined && element.burnedBy.skill != undefined) {
+              element.burnedBy.skill.score += Math.ceil(util.getJackpot(element.burnedBy.skill.score));
+              element.burnedBy.sendMessage('You killed ' + element.name + ' with Fire.');
+              element.sendMessage('You have been killed by ' + element.burnedBy.name + ' with Fire.')
+            }
+          }
+      }
+    )}
+   return () => {
+        // run the fire
+        burn()
+    };
+})();
 var maintainloop = (() => {
   // Place obstacles
   function placeRoids() {
