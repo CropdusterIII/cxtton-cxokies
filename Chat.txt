@@ -1,2 +1,10 @@
 Crop: the return motion got errored oof
 
+this.color = 16;
+        this.skin = 0;
+        
+        if (info.PROPERTIES != null && info.PROPERTIES.COLOR != null) this.color = info.PROPERTIES.COLOR;
+        if (info.PROPERTIES != null && info.PROPERTIES.SKIN != null) this.skin = info.PROPERTIES.SKIN;
+        
+        upgrades: e.upgrades.map(r => ({ tier: r.tier, index: r.index })),
+              
