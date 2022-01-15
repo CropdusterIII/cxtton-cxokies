@@ -2674,6 +2674,12 @@ class Entity {
         this.SIZE += 69;
         this.maxSpeed = this.topSpeed;
         break;
+        
+      case "growandshrink":
+        this.SIZE += 1;
+        this.SIZE -= 0.5;
+        this.maxSpeed = this.topSpeed;
+        break;
       // end
       case "motor":
         this.maxSpeed = 0;
