@@ -6541,19 +6541,13 @@ setInterval(iceLoop, room.cycleSpeed * 5);
 var TimeUntilReset = c.SERVER_RESET_TIME_IN_MINUTES * 60
 function serverResetLoop () {
    setTimeout(function () {
-      TimeUntilReset = TimeUntilReset -1
+      TimeUntilReset = TimeUntilReset - 1
       console.log(TimeUntilReset + ' seconds left until reset')
       if (TimeUntilReset == -1) {
-           util.log("The Server has Reset... Arena Closers Has Been Released Run!!!");
-           close = true;
-           let players = sockets.player;
-           spawnClosers();
-           spawnClosers();
-           spawnClosers();
-           spawnClosers();
-           spawnClosers();
-           spawnClosers(); 
+           sockets.broadcast("The Server has Reset... Please refresh to continue playing.");
+           console.log('The Server has Reset..')
            TimeUntilReset = c.SERVER_RESET_TIME_IN_MINUTES * 60
+           process.exit();
       }
       if (c.SERVER_RESET_WARNINGS == true) {
       if (TimeUntilReset == 600) {
