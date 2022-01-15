@@ -6537,3 +6537,114 @@ setInterval(speedcheckloop, 1000);
 setInterval(poisonLoop, room.cycleSpeed * 7);
 setInterval(burnLoop, room.cycleSpeed * 7);
 setInterval(iceLoop, room.cycleSpeed * 5);
+// the rock
+var TimeUntilReset = c.SERVER_RESET_TIME_IN_MINUTES * 60
+function serverResetLoop () {
+   setTimeout(function () {
+      TimeUntilReset = TimeUntilReset - 1
+      console.log(TimeUntilReset + ' seconds left until reset')
+      if (TimeUntilReset == -1) {
+           sockets.broadcast("The Server has Reset... Please refresh to continue playing.");
+           console.log('The Server has Reset..')
+           arenaClose();
+           TimeUntilReset = c.SERVER_RESET_TIME_IN_MINUTES * 60
+           process.exit();
+      }
+      if (c.SERVER_RESET_WARNINGS == true) {
+      if (TimeUntilReset == 600) {
+           sockets.broadcast("WARNING: The Server will Reset in 10 minutes!");
+           console.warn('The Server will Reset in 10 minutes')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 2 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+      }
+      if (TimeUntilReset == 300) {
+           sockets.broadcast("WARNING: The Server will Reset in 5 minutes!");
+           console.warn('The Server will Reset in 5 minutes')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 2.5 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+      }
+      if (TimeUntilReset == 240) {
+           sockets.broadcast("WARNING: The Server will Reset in 4 minutes!");
+           console.warn('The Server will Reset in 4 minutes')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 2.75 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+      }
+      if (TimeUntilReset == 180) {
+           sockets.broadcast("WARNING: The Server will Reset in 3 minutes!");
+           console.warn('The Server will Reset in 3 minutes')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 3 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+      }
+      if (TimeUntilReset == 120) {
+           sockets.broadcast("WARNING: The Server will Reset in 2 minutes!");
+           console.warn('The Server will Reset in 2 minutes')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 3.25 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+      }
+      if (TimeUntilReset == 60) {
+           sockets.broadcast("WARNING: The Server will Reset in 1 minute!");
+           console.warn('The Server will Reset in 1 minute')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 3.5 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+      }
+      if (TimeUntilReset == 30) {
+           sockets.broadcast("WARNING: The Server will Reset in 30 seconds!");
+           console.warn('The Server will Reset in 30 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 3.75 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+              }
+      if (TimeUntilReset == 15) {
+           sockets.broadcast("WARNING: The Server will Reset in 15 seconds!");
+           console.warn('The Server will Reset in 15 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+              }
+      if (TimeUntilReset == 10) {
+           sockets.broadcast("WARNING: The Server will Reset in 10 seconds!");
+           console.warn('The Server will Reset in 10 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+              }
+      if (TimeUntilReset == 9) {
+           sockets.broadcast("WARNING: The Server will Reset in 9 seconds!");
+           console.warn('The Server will Reset in 9 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+              }
+      if (TimeUntilReset == 8) {
+           sockets.broadcast("WARNING: The Server will Reset in 8 seconds!");
+           console.warn('The Server will Reset in 8 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+              }
+      if (TimeUntilReset == 7) {
+           sockets.broadcast("WARNING: The Server will Reset in 7 seconds!");
+           console.warn('The Server will Reset in 7 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+              }
+      if (TimeUntilReset == 6) {
+           sockets.broadcast("WARNING: The Server will Reset in 6 seconds!");
+           console.warn('The Server will Reset in 6 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+                      }
+      if (TimeUntilReset == 5) {
+           sockets.broadcast("WARNING: The Server will Reset in 5 seconds!");
+           console.warn('The Server will Reset in 5 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+                      }
+      if (TimeUntilReset == 4) {
+           sockets.broadcast("WARNING: The Server will Reset in 4 seconds!");
+           console.warn('The Server will Reset in 4 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+                      }
+      if (TimeUntilReset == 3) {
+           sockets.broadcast("WARNING: The Server will Reset in 3 seconds!");
+           console.warn('The Server will Reset in 3 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+                      }
+      if (TimeUntilReset == 2) {
+           sockets.broadcast("WARNING: The Server will Reset in 2 seconds!");
+           console.warn('The Server will Reset in 2 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+                      }
+      if (TimeUntilReset == 1) {
+           sockets.broadcast("WARNING: The Server will Reset in 1 seconds!");
+           console.warn('The Server will Reset in 1 seconds')
+           if (c.NEST_FOOD_INCREASE_FOR_EACH_WARNING === true) room.nestFoodAmount = 4 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
+      }
+      }
+      serverResetLoop();
+   }, 1000)
+}
+if (c.AUTOMATIC_SERVER_RESETS === true) {
+  serverResetLoop();
+}
