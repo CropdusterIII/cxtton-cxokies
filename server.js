@@ -6544,11 +6544,16 @@ function serverResetLoop () {
       TimeUntilReset = TimeUntilReset -1
       console.log(TimeUntilReset + ' seconds left until reset')
       if (TimeUntilReset == -1) {
-           sockets.broadcast("The Server has Reset... Arena Closers Has Been Released Run!!!");
+           util.log("The Server has Reset... Arena Closers Has Been Released Run!!!");
+           close = true;
+           let players = sockets.player;
+           spawnClosers();
+           spawnClosers();
+           spawnClosers();
+           spawnClosers();
+           spawnClosers();
+           spawnClosers(); 
            TimeUntilReset = c.SERVER_RESET_TIME_IN_MINUTES * 60
-           spawnClosers();
-           spawnClosers();
-           spawnClosers();
       }
       if (c.SERVER_RESET_WARNINGS == true) {
       if (TimeUntilReset == 600) {
