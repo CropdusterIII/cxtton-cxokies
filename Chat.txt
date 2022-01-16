@@ -8,3 +8,20 @@ this.color = 16;
         
         upgrades: e.upgrades.map(r => ({ tier: r.tier, index: r.index })),
               
+              
+              out.color: rounder(t.bound.color),
+                    out.skin: rounder(t.bound.skin),
+                    out.color_unmix: rounder(t.bound.color_unmix),
+                  
+                  if (info.COLOR_SETTINGS != null) {
+            if (info.COLOR_SETTINGS.COLOR != null && info.COLOR_SETTINGS != null) {
+                this.color = info.COLOR_SETTINGS.COLOR
+            }
+            if (info.COLOR_SETTINGS.SKIN != null && info.COLOR_SETTINGS != null) {
+                this.skin = info.COLOR_SETTINGS.SKIN
+            }
+            if (info.COLOR_SETTINGS.COLOR_UNMIX != null && info.COLOR_SETTINGS != null) {
+                this.color_unmix = info.COLOR_SETTINGS.COLOR_UNMIX
+            }
+        }
+       
