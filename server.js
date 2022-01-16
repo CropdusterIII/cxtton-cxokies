@@ -2524,7 +2524,7 @@ class Entity {
 
   get size() {
     if (this.bond == null)
-      return (this.coreSize || this.SIZE) * (1 + this.skill.level / 60);
+      return (this.coreSize || this.SIZE) * (1 + this.skill.level / 75);
     return this.bond.size * this.bound.size;
   }
 
