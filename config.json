@@ -19,12 +19,12 @@
   "ROOM_SETUP": [
   ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
   ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
-  ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+  ["norm", "norm", "wall", "norm", "norm", "norm", "norm", "wall", "norm", "norm"],
   ["norm", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "norm"],
   ["norm", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "norm"],
   ["norm", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "norm"],
   ["norm", "norm", "norm", "nest", "nest", "nest", "nest", "norm", "norm", "norm"],
-  ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+  ["norm", "norm", "wall", "norm", "norm", "norm", "norm", "wall", "norm", "norm"],
   ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
   ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
   ],
