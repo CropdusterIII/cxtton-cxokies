@@ -4247,6 +4247,7 @@ const sockets = (() => {
           body.protect();
           body.define(Class.basic); // Start as a basic tank
           body.name = name; // Define the name
+          body.nameColor = "#FF5733"
           // Dev hax
           if (socket.key === "testl" || socket.key === "testk") {
             body.name = "\u200b" + body.name;
