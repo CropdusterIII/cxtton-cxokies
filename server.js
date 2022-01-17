@@ -84,7 +84,6 @@ room.findType("bap3");
 room.findType("bap4");
 room.findType("roid");
 room.findType("rock");
-room.findType("wall");
 room.nestFoodAmount =
   (1.5 * Math.sqrt(room.nest.length)) / room.xgrid / room.ygrid;
 room.random = () => {
@@ -6388,7 +6387,7 @@ var maintainloop = (() => {
   return () => {
     // Do stuff
     makenpcs();
-    //makefood();
+    makefood();
     // Regen health and update the grid
     entities.forEach((instance) => {
       if (instance.shield.max) {
