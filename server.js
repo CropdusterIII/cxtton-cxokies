@@ -1300,6 +1300,8 @@ class Gun {
       time: 0,
       power: 0,
     };
+    let color = this.color;
+    this.color = color;
     this.body = body;
     this.master = body.source;
     this.label = "";
