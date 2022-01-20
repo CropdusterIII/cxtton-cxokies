@@ -25,3 +25,6 @@ this.color = 16;
             }
         }
        
+       let color = this.color;
+    this.color = color;
+    

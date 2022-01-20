@@ -1300,8 +1300,6 @@ class Gun {
       time: 0,
       power: 0,
     };
-    let color = this.color;
-    this.color = color;
     this.body = body;
     this.master = body.source;
     this.label = "";
@@ -2586,7 +2584,8 @@ class Entity {
           ? 1
           : 0,
       color: this.color,
-      name: this.name,
+      //  tank_color: this.body.color,
+      name: this.nameColor + this.name,
       score: this.skill.score,
       guns: this.guns.map((gun) => gun.getLastShot()),
       turrets: this.turrets.map((turret) => turret.camera(true)),
