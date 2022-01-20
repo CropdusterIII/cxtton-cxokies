@@ -2590,6 +2590,7 @@ class Entity {
       score: this.skill.score,
       guns: this.guns.map((gun) => gun.getLastShot()),
       turrets: this.turrets.map((turret) => turret.camera(true)),
+      alpha: this.alpha
     };
   }
 
