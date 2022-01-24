@@ -2584,7 +2584,7 @@ class Entity {
           ? 1
           : 0,
       color: this.color,
-      //  tank_color: this.body.color,
+      //tank_color: this.body.color,
       // name: this.nameColor + this.name,
       name: this.name,
       score: this.skill.score,
