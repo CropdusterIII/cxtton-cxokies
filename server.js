@@ -3201,7 +3201,7 @@ var http = require("http"),
         upgrades: e.upgrades.map((r) => ({ tier: r.tier, index: r.index })),
         guns: e.guns.map(function (gun) {
           return {
-            //skin: rounder(gun.skin),
+            skin: rounder(gun.skin),
             offset: rounder(gun.offset),
             direction: rounder(gun.direction),
             length: rounder(gun.length),
