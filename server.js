@@ -5987,7 +5987,7 @@ var maintainloop = (() => {
         util.log("[SPAWN] Preparing to spawn...");
         timer = 8;
         let choice = [];
-        switch (ran.chooseChance(2, 1, 2)) {
+        switch (ran.chooseChance(2, 1, 2, 1)) {
           case 0:
             choice = [[Class.elite_destroyer], 2, "a", "nest"];
             break;
@@ -5998,6 +5998,10 @@ var maintainloop = (() => {
           case 2:
             choice = [[Class.elitefalcon2], 2, "castle", "norm"];
             sockets.broadcast("Time To Rush Yourself Ready!");
+            break;
+          case 3:
+            choice = [[Class.hexaBody2], 1, "castle", "norm"];
+            sockets.broadcast("sus");
             break;
         }
         boss.prepareToSpawn(...choice);
