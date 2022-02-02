@@ -1,15 +1,15 @@
 dependencies:
-  google-closure-library: 20211201.0.0
+  google-closure-library: 20220104.0.0
   ws: 6.1.4
 packages:
   /async-limiter/1.0.1:
     dev: false
     resolution:
       integrity: sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
-  /google-closure-library/20211201.0.0:
+  /google-closure-library/20220104.0.0:
     dev: false
     resolution:
-      integrity: sha512-yMwimtds4GVPBKyUGRQ2x1V5/+FTYSkh+y4PSK1LdYi15Ux9nXkD59hBX8IFAFuoqkiXq4Nm8jSZnEth6iV8Gg==
+      integrity: sha512-gHrIxIKcnn9pR/8sVwCLH6C4urmAekSYZKYzTawKG72HQsRnadXOCuRTA+kf6nagDCbsu6HzhSWA2rMBb2L1Aw==
   /ws/6.1.4:
     dependencies:
       async-limiter: 1.0.1
@@ -20,5 +20,5 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
-  google-closure-library: ^20211201.0.0
+  google-closure-library: ^20220104.0.0
   ws: 6.1.x
